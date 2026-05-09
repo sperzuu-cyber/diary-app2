@@ -587,3 +587,19 @@ textarea {
     color: #bfa7ff;
     font-weight: 800;
 }
+
+.video-preview {
+    margin-top: 20px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.video-preview iframe {
+    width: 100%;
+    max-width: 720px;
+    height: 405px;
+    border: none;
+    border-radius: 22px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.35);
+}
