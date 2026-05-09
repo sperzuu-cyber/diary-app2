@@ -375,6 +375,44 @@ def timer():
 
     return render_template("timer.html", user=current_user())
 
+@app.route("/toggle-privacy/<int:entry_id>", methods=["POST"])
+def toggle_privacy(entry_id):
+    if not login_required():
+        return redirect(url_for("login"))
+
+    db = get_db()
+
+    entry = db.execute(
+        """
+        SELECT * FROM entries
+        WHERE id = ? AND user_id = ?
+        """,
+        (entry_id, session["user_id"])
+    ).fetchone()
+
+    if not entry:
+        flash("Entry not found.", "danger")
+        return redirect(url_for("journal"))
+
+    new_status = 0 if entry["is_public"] == 1 else 1
+
+    db.execute(
+        """
+        UPDATE entries
+        SET is_public = ?
+        WHERE id = ? AND user_id = ?
+        """,
+        (new_status, entry_id, session["user_id"])
+    )
+
+    db.commit()
+
+    if new_status == 1:
+        flash("Entry is now public.", "success")
+    else:
+        flash("Entry is now private.", "info")
+
+    return redirect(url_for("journal"))
 
 if __name__ == "__main__":
     app.run(debug=True)

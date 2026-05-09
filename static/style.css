@@ -413,3 +413,22 @@ textarea {
     color: var(--muted);
     font-size: 0.9rem;
 }
+
+.privacy-toggle {
+    margin-top: 14px;
+    padding: 10px 14px;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    cursor: pointer;
+    font-weight: 800;
+}
+
+.privacy-toggle.public {
+    background: rgba(84,214,138,0.16);
+    color: #a8ffc8;
+}
+
+.privacy-toggle.private {
+    background: rgba(255,255,255,0.08);
+    color: var(--muted);
+}

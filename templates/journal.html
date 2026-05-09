@@ -45,6 +45,18 @@
             {% if entries %}
                 {% for entry in entries %}
                     <article class="vault-card">
+                        <form method="POST" action="{{ url_for('toggle_privacy', entry_id=entry.id) }}">
+                            {% if entry.is_public == 1 %}
+                                <button type="submit" class="privacy-toggle public">
+                                    Public — click to make private
+                                </button>
+                            {% else %}
+                                <button type="submit" class="privacy-toggle private">
+                                    Private — click to make public
+                                </button>
+                            {% endif %}
+                        </form>
+
                         <p class="date">{{ entry.created_at }}</p>
                         <h3>{{ entry.entry_type.replace("_", " ").title() }}</h3>
                         {% if entry.mood %}
