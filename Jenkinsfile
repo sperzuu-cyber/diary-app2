@@ -1,6 +1,10 @@
 pipeline {
     agent any
 
+    triggers {
+        githubPush()
+    }
+
     stages {
         stage('Checkout latest code') {
             steps {
@@ -38,6 +42,16 @@ pipeline {
                 curl -f http://localhost:5000/login
                 '''
             }
+        }
+    }
+
+    post {
+        success {
+            echo 'Deployment successful. Website is live.'
+        }
+
+        failure {
+            echo 'Deployment failed. Check Jenkins console output and diary-app.service logs.'
         }
     }
 }
