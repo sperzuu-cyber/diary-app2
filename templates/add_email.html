@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="auth-card">
+    <h1>Add your email</h1>
+    <p>Add an email so you can reset your password if you forget it.</p>
+
+    <form method="POST">
+        <label>Email address</label>
+        <input type="email" name="email" required>
+
+        <button type="submit">Save Email</button>
+    </form>
+</section>
+{% endblock %}

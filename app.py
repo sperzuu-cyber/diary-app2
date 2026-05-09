@@ -4,6 +4,7 @@ import os
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime, date
 
+
 app = Flask(__name__)
 app.secret_key = "CHANGE_THIS_TO_A_LONG_RANDOM_SECRET_KEY"
 
@@ -39,12 +40,24 @@ def init_db():
     db.execute("""
         CREATE TABLE IF NOT EXISTS users (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
-            username TEXT UNIQUE NOT NULL,
+            email TEXT UNIQUE,
+            username TEXT NOT NULL UNIQUE,
             password_hash TEXT NOT NULL,
+            reset_token TEXT,
+            reset_token_expiry TEXT,
             no_contact_start_date TEXT,
             no_contact_end_date TEXT
         )
     """)
+
+    if not column_exists(db, "users", "email"):
+        db.execute("ALTER TABLE users ADD COLUMN email TEXT")
+
+    if not column_exists(db, "users", "reset_token"):
+        db.execute("ALTER TABLE users ADD COLUMN reset_token TEXT")
+
+    if not column_exists(db, "users", "reset_token_expiry"):
+        db.execute("ALTER TABLE users ADD COLUMN reset_token_expiry TEXT")
 
     db.execute("""
         CREATE TABLE IF NOT EXISTS entries (
@@ -138,35 +151,33 @@ def home():
 @app.route("/register", methods=["GET", "POST"])
 def register():
     if request.method == "POST":
-        username = request.form.get("username", "").strip()
-        password = request.form.get("password", "").strip()
-
-        if not username or not password:
-            flash("Username and password are required.", "danger")
-            return redirect(url_for("register"))
+        email = request.form["email"].strip().lower()
+        username = request.form["username"].strip()
+        password = request.form["password"]
 
         password_hash = generate_password_hash(password)
-        today = date.today().isoformat()
 
-        db = get_db()
+        conn = sqlite3.connect("database.db")
+        cursor = conn.cursor()
 
         try:
-            db.execute(
-                """
-                INSERT INTO users (username, password_hash, no_contact_start_date)
+            cursor.execute("""
+                INSERT INTO users (email, username, password_hash)
                 VALUES (?, ?, ?)
-                """,
-                (username, password_hash, today)
-            )
-            db.commit()
-            flash("Account created. Your no-contact streak starts today.", "success")
-            return redirect(url_for("login"))
+            """, (email, username, password_hash))
+
+            conn.commit()
+            conn.close()
+
+            flash("Account created successfully. Please log in.")
+            return redirect("/login")
 
         except sqlite3.IntegrityError:
-            flash("That username already exists.", "danger")
-            return redirect(url_for("register"))
+            conn.close()
+            flash("Email or username already exists.")
+            return redirect("/register")
 
-    return render_template("auth.html", mode="register")
+    return render_template("register.html")
 
 
 @app.route("/login", methods=["GET", "POST"])
@@ -184,6 +195,11 @@ def login():
         if user and check_password_hash(user["password_hash"], password):
             session.clear()
             session["user_id"] = user["id"]
+
+            if not user["email"]:
+                flash("Please add your email so you can recover your account later.", "info")
+                return redirect(url_for("add_email"))
+
             flash("You are back. Choose yourself again today.", "success")
             return redirect(url_for("home"))
 
@@ -199,6 +215,39 @@ def logout():
     flash("Logged out safely.", "info")
     return redirect(url_for("home"))
 
+@app.route("/add-email", methods=["GET", "POST"])
+def add_email():
+    if not login_required():
+        return redirect(url_for("login"))
+
+    db = get_db()
+
+    if request.method == "POST":
+        email = request.form.get("email", "").strip().lower()
+
+        if not email:
+            flash("Please enter an email address.", "warning")
+            return redirect(url_for("add_email"))
+
+        existing_user = db.execute(
+            "SELECT id FROM users WHERE email = ? AND id != ?",
+            (email, session["user_id"])
+        ).fetchone()
+
+        if existing_user:
+            flash("That email is already being used.", "danger")
+            return redirect(url_for("add_email"))
+
+        db.execute(
+            "UPDATE users SET email = ? WHERE id = ?",
+            (email, session["user_id"])
+        )
+        db.commit()
+
+        flash("Email added successfully.", "success")
+        return redirect(url_for("home"))
+
+    return render_template("add_email.html", user=current_user())
 
 @app.route("/write-instead", methods=["GET", "POST"])
 def write_instead():
