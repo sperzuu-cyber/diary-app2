@@ -40,7 +40,16 @@
                                         <strong>{{ comment.username }}</strong>
                                         <span>{{ comment.created_at }}</span>
                                     </p>
+
                                     <p>{{ comment.content }}</p>
+
+                                    {% if user and user.id == comment.user_id %}
+                                        <form method="POST" action="{{ url_for('delete_comment', comment_id=comment.id) }}">
+                                            <button type="submit" class="delete-comment-button">
+                                                Delete
+                                            </button>
+                                        </form>
+                                    {% endif %}
                                 </div>
                             {% endif %}
                         {% endfor %}

@@ -483,5 +483,68 @@ def comment(entry_id):
     flash("Comment posted.", "success")
     return redirect(url_for("public_vault"))
 
+@app.route("/delete-entry/<int:entry_id>", methods=["POST"])
+def delete_entry(entry_id):
+    if not login_required():
+        return redirect(url_for("login"))
+
+    db = get_db()
+
+    entry = db.execute(
+        """
+        SELECT * FROM entries
+        WHERE id = ? AND user_id = ?
+        """,
+        (entry_id, session["user_id"])
+    ).fetchone()
+
+    if not entry:
+        flash("Entry not found.", "danger")
+        return redirect(url_for("journal"))
+
+    db.execute(
+        "DELETE FROM comments WHERE entry_id = ?",
+        (entry_id,)
+    )
+
+    db.execute(
+        "DELETE FROM entries WHERE id = ?",
+        (entry_id,)
+    )
+
+    db.commit()
+
+    flash("Entry deleted.", "info")
+    return redirect(url_for("journal"))
+
+@app.route("/delete-comment/<int:comment_id>", methods=["POST"])
+def delete_comment(comment_id):
+    if not login_required():
+        return redirect(url_for("login"))
+
+    db = get_db()
+
+    comment = db.execute(
+        """
+        SELECT * FROM comments
+        WHERE id = ? AND user_id = ?
+        """,
+        (comment_id, session["user_id"])
+    ).fetchone()
+
+    if not comment:
+        flash("Comment not found.", "danger")
+        return redirect(url_for("public_vault"))
+
+    db.execute(
+        "DELETE FROM comments WHERE id = ?",
+        (comment_id,)
+    )
+
+    db.commit()
+
+    flash("Comment deleted.", "info")
+    return redirect(url_for("public_vault"))
+
 if __name__ == "__main__":
     app.run(debug=True)
