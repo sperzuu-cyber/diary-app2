@@ -23,6 +23,10 @@ pipeline {
                 --exclude '__pycache__' \
                 --exclude 'static/uploads' \
                 ./ /home/ubuntu/diary-app2/
+                
+                sudo chown -R ubuntu:ubuntu /home/ubuntu/diary-app2
+                sudo chmod 775 /home/ubuntu/diary-app2
+                sudo chmod 664 /home/ubuntu/diary-app2/database.db
                 '''
             }
         }
