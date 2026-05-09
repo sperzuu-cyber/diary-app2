@@ -1,12 +1,15 @@
 from flask import Flask, render_template, request, redirect, url_for, session, flash, g
 import sqlite3
+import os
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime, date
 
 app = Flask(__name__)
 app.secret_key = "CHANGE_THIS_TO_A_LONG_RANDOM_SECRET_KEY"
 
-DATABASE = "database.db"
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+DATABASE = os.path.join(BASE_DIR, "database.db")
 
 
 # -----------------------------
