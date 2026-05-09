@@ -13,20 +13,31 @@ pipeline {
             }
         }
 
+        stage('Validate Python') {
+            steps {
+                sh '''
+                python3 -m py_compile app.py
+                '''
+            }
+        }
+
         stage('Deploy code to app folder') {
             steps {
                 sh '''
-                sudo rsync -av --delete \
+                sudo /usr/bin/rsync -av --delete \
                 --exclude 'venv' \
                 --exclude 'database.db' \
+                --exclude 'database.db-journal' \
+                --exclude 'database.db-wal' \
+                --exclude 'database.db-shm' \
                 --exclude '.git' \
                 --exclude '__pycache__' \
                 --exclude 'static/uploads' \
                 ./ /home/ubuntu/diary-app2/
-                
-                sudo chown -R ubuntu:ubuntu /home/ubuntu/diary-app2
-                sudo chmod 775 /home/ubuntu/diary-app2
-                sudo chmod 664 /home/ubuntu/diary-app2/database.db
+
+                sudo /usr/bin/chown -R ubuntu:ubuntu /home/ubuntu/diary-app2
+                sudo /usr/bin/chmod 775 /home/ubuntu/diary-app2
+                sudo /usr/bin/chmod 664 /home/ubuntu/diary-app2/database.db
                 '''
             }
         }
@@ -34,7 +45,7 @@ pipeline {
         stage('Restart app') {
             steps {
                 sh '''
-                sudo /bin/systemctl restart diary-app.service
+                sudo /usr/bin/systemctl restart diary-app.service
                 '''
             }
         }
