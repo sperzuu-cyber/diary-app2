@@ -556,3 +556,34 @@ textarea {
 .resource-card a:hover {
     color: var(--text);
 }
+
+.resource-rotator {
+    margin-top: 28px;
+    padding: 24px;
+    border-radius: 24px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid var(--border);
+    text-align: center;
+}
+
+.resource-rotator h3 {
+    font-size: 1.8rem;
+    margin: 10px 0;
+}
+
+.resource-actions {
+    margin-top: 18px;
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.resource-actions a {
+    padding: 14px 20px;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid var(--border);
+    color: #bfa7ff;
+    font-weight: 800;
+}
