@@ -508,3 +508,51 @@ textarea {
 .delete-comment-button:hover {
     background: rgba(255, 77, 77, 0.24);
 }
+
+.resources-section {
+    margin-top: 48px;
+    text-align: left;
+}
+
+.resources-section h2 {
+    text-align: center;
+}
+
+.resource-grid {
+    display: grid;
+    gap: 18px;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+}
+
+.resource-card {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid var(--border);
+    border-radius: 22px;
+    padding: 20px;
+    transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.resource-card:hover {
+    transform: translateY(-3px);
+    background: rgba(255,255,255,0.09);
+}
+
+.resource-card h3 {
+    margin-top: 0;
+}
+
+.resource-card p {
+    color: var(--muted);
+    line-height: 1.6;
+}
+
+.resource-card a {
+    display: inline-block;
+    margin-top: 12px;
+    font-weight: 800;
+    color: #bfa7ff;
+}
+
+.resource-card a:hover {
+    color: var(--text);
+}

@@ -26,6 +26,99 @@
             <button class="button" onclick="startTimer()">Start timer</button>
             <a class="button secondary" href="{{ url_for('write_instead') }}">Write the message instead</a>
         </div>
+
+        <section class="resources-section">
+            <h2>Don’t text them yet.</h2>
+
+            <p class="subtitle">
+                Your nervous system is activated right now.
+                Regulate first. Decide later.
+            </p>
+
+            <div class="resource-grid">
+
+                <div class="resource-card">
+                    <h3>Jay Shetty</h3>
+                    <p>Relationship healing, self-worth, emotional maturity, letting go and moving forward.</p>
+                    <a href="https://www.youtube.com/results?search_query=jay+shetty+breakup" target="_blank">
+                        Watch Jay Shetty
+                    </a>
+                </div>
+
+                <div class="resource-card">
+                    <h3>Mel Robbins</h3>
+                    <p>Stop chasing closure. Choose yourself again. Let them.</p>
+                    <a href="https://www.youtube.com/results?search_query=mel+robbins+breakup" target="_blank">
+                        Listen to Mel Robbins
+                    </a>
+                </div>
+
+                <div class="resource-card">
+                    <h3>Liz The Wizard</h3>
+                    <p>Self-concept, detachment, emotional control, rebuilding confidence after heartbreak.</p>
+                    <a href="https://www.youtube.com/results?search_query=liz+the+wizard+self+concept" target="_blank">
+                        Watch Liz The Wizard
+                    </a>
+                </div>
+
+                <div class="resource-card">
+                    <h3>Healing playlist</h3>
+                    <p>Music for late nights, emotional crashes, and moments where you almost text them.</p>
+                    <a href="https://open.spotify.com/search/breakup%20healing%20playlist" target="_blank">
+                        Open playlist
+                    </a>
+                </div>
+
+                <div class="resource-card">
+                    <h3>Calm your nervous system</h3>
+                    <p>Your brain is looking for relief, not necessarily them.</p>
+                    <a href="https://www.youtube.com/results?search_query=guided+breathing+exercise+anxiety" target="_blank">
+                        Start breathing exercise
+                    </a>
+                </div>
+
+                <div class="resource-card">
+                    <h3>Attachment healing</h3>
+                    <p>Understand anxious attachment, emotional dependency, and obsession loops.</p>
+                    <a href="https://www.youtube.com/results?search_query=attachment+style+healing+breakup" target="_blank">
+                        Learn attachment healing
+                    </a>
+                </div>
+
+                <div class="resource-card">
+                    <h3>Self-respect reminder</h3>
+                    <p>Do not abandon yourself trying to stop someone else from leaving.</p>
+                    <a href="{{ url_for('write_instead') }}">
+                        Write here instead
+                    </a>
+                </div>
+
+                <div class="resource-card">
+                    <h3>Gym suggestion</h3>
+                    <p>Redirect the emotional energy into movement. Train instead of spiralling.</p>
+                    <a href="https://www.youtube.com/results?search_query=beginner+gym+workout" target="_blank">
+                        Find workout
+                    </a>
+                </div>
+
+                <div class="resource-card">
+                    <h3>Walk or hike</h3>
+                    <p>Leave the room. Change your environment. Let the urge pass physically.</p>
+                    <a href="https://www.google.com/maps/search/parks+near+me" target="_blank">
+                        Find a walk nearby
+                    </a>
+                </div>
+
+                <div class="resource-card">
+                    <h3>Motivational reset</h3>
+                    <p>Remember who you were before this relationship consumed you.</p>
+                    <a href="https://www.youtube.com/results?search_query=self+respect+motivation" target="_blank">
+                        Watch motivation
+                    </a>
+                </div>
+
+            </div>
+        </section>
     </div>
 </section>
 
@@ -39,7 +132,10 @@ const prompts = [
     "Are you contacting them for love, or relief?",
     "What would the healed version of you do right now?",
     "What are you hoping they say back?",
-    "What would protecting your dignity look like tonight?"
+    "What would protecting your dignity look like tonight?",
+    "Would sending this message protect your peace or restart the wound?",
+    "Are you missing them, or missing the version of them you hoped they would become?",
+    "What would you do right now if you truly believed you were enough?"
 ];
 
 function updateDisplay() {
