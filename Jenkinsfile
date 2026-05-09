@@ -1,6 +1,11 @@
 pipeline {
     agent any
 
+    triggers {
+        githubPush()
+    }
+
+
     stages {
         stage('Checkout latest code') {
             steps {
