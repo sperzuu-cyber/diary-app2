@@ -10,7 +10,7 @@ app.secret_key = "CHANGE_THIS_TO_A_LONG_RANDOM_SECRET_KEY"
 
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-DATABASE = os.path.join(BASE_DIR, "database.db")
+DATABASE = "/home/ubuntu/break-loop-data/database.db"
 
 # -----------------------------
 # DATABASE HELPERS

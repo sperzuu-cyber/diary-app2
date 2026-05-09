@@ -35,9 +35,13 @@ pipeline {
                 --exclude 'static/uploads' \
                 ./ /home/ubuntu/diary-app2/
 
+                
                 sudo /usr/bin/chown -R ubuntu:ubuntu /home/ubuntu/diary-app2
                 sudo /usr/bin/chmod 775 /home/ubuntu/diary-app2
-                sudo /usr/bin/chmod 664 /home/ubuntu/diary-app2/database.db
+
+                sudo /usr/bin/chown -R ubuntu:ubuntu /home/ubuntu/break-loop-data
+                sudo /usr/bin/chmod 775 /home/ubuntu/break-loop-data
+                sudo /usr/bin/chmod 664 /home/ubuntu/break-loop-data/database.db
                 '''
             }
         }
