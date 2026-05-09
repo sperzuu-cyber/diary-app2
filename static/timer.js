@@ -18,17 +18,20 @@ const resources = [
     {
         title: "Mel Robbins",
         message: "Stop chasing closure. Choose yourself again. Let them.",
-        link: "https://www.youtube.com/results?search_query=mel+robbins+breakup"
+        link: "https://www.youtube.com/results?search_query=mel+robbins+breakup",
+        video: "c1orPqt6Wr0"
     },
     {
         title: "Jay Shetty",
         message: "Relationship healing, self-worth, emotional maturity, letting go and moving forward.",
-        link: "https://www.youtube.com/results?search_query=jay+shetty+breakup"
+        link: "https://www.youtube.com/results?search_query=jay+shetty+breakup",
+        video: "nxxAZ6CUU-M"
     },
     {
         title: "Liz The Wizard",
         message: "Self-concept, detachment, emotional control, rebuilding confidence after heartbreak.",
-        link: "https://www.youtube.com/results?search_query=liz+the+wizard+self+concept"
+        link: "https://www.youtube.com/results?search_query=liz+the+wizard+self+concept",
+        video: "x0DTdXEd3mQ"
     },
     {
         title: "Healing playlist",
@@ -38,17 +41,20 @@ const resources = [
     {
         title: "Calm your nervous system",
         message: "Your brain is looking for relief, not necessarily them. Breathe before you decide.",
-        link: "https://www.youtube.com/results?search_query=guided+breathing+exercise+anxiety"
+        link: "https://www.youtube.com/results?search_query=guided+breathing+exercise+anxiety",
+        video: "xYBZUcr9XrQ"
     },
     {
         title: "Attachment healing",
         message: "Understand anxious attachment, emotional dependency, and obsession loops.",
-        link: "https://www.youtube.com/results?search_query=attachment+style+healing+breakup"
+        link: "https://www.youtube.com/results?search_query=attachment+style+healing+breakup",
+        video: "CPZnScHa1d0"
     },
     {
         title: "Gym suggestion",
         message: "Redirect the emotional energy into movement. Train instead of spiralling.",
-        link: "https://www.youtube.com/results?search_query=beginner+gym+workout"
+        link: "https://www.youtube.com/results?search_query=beginner+gym+workout",
+        video: "cbKkB3POqaY"
     },
     {
         title: "Walk or hike",
@@ -58,7 +64,8 @@ const resources = [
     {
         title: "Motivational reset",
         message: "Remember who you were before this relationship consumed you.",
-        link: "https://www.youtube.com/results?search_query=self+respect+motivation"
+        link: "https://www.youtube.com/results?search_query=self+respect+motivation",
+        video: "kYg79NYLWnc"
     }
 ];
 
