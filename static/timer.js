@@ -136,5 +136,5 @@ document.addEventListener("DOMContentLoaded", () => {
 
     setInterval(() => {
         nextResource();
-    }, 8000);
+    }, 4000);
 });
