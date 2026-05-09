@@ -113,6 +113,16 @@ function showResource(index) {
     document.getElementById("resource-title").innerText = resource.title;
     document.getElementById("resource-message").innerText = resource.message;
     document.getElementById("resource-link").href = resource.link;
+
+    const video = document.getElementById("resource-video");
+
+    if (resource.video) {
+        video.src = `https://www.youtube.com/embed/${resource.video}`;
+        video.style.display = "block";
+    } else {
+        video.src = "";
+        video.style.display = "none";
+    }
 }
 
 function nextResource() {
