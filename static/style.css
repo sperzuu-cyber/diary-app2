@@ -432,3 +432,22 @@ textarea {
     background: rgba(255,255,255,0.08);
     color: var(--muted);
 }
+
+.hidden {
+    display: none;
+}
+
+.confirm-reset {
+    margin-top: 18px;
+    padding: 18px;
+    border-radius: 18px;
+    background: rgba(255,77,94,0.12);
+    border: 1px solid rgba(255,77,94,0.45);
+}
+
+.confirm-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+}

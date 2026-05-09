@@ -23,10 +23,39 @@
             <a class="button secondary" href="{{ url_for('timer') }}">Start urge timer</a>
         </div>
 
-        <form method="POST" action="{{ url_for('relapse') }}" class="relapse-form">
+        <div class="relapse-form">
             <p>Did you contact them?</p>
-            <button type="submit" class="danger-button">Reset with compassion</button>
-        </form>
+
+            <button type="button" class="danger-button" onclick="showResetConfirm()">
+                Reset streak
+            </button>
+
+            <form id="resetConfirmForm" method="POST" action="{{ url_for('relapse') }}" class="confirm-reset hidden">
+                <p>Are you sure? This will reset your no-contact streak.</p>
+
+                <div class="confirm-actions">
+                    <button type="button" class="button secondary" onclick="hideResetConfirm()">
+                        No, keep my streak
+                    </button>
+
+                    <button type="submit" class="danger-button">
+                        Yes, reset with compassion
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <script>
+        function showResetConfirm() {
+            document.getElementById("resetConfirmForm").classList.remove("hidden");
+        }
+
+        function hideResetConfirm() {
+            document.getElementById("resetConfirmForm").classList.add("hidden");
+        }
+        </script>
+
+
     </div>
 </section>
 {% endblock %}
