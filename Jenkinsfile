@@ -1,11 +1,6 @@
 pipeline {
     agent any
 
-    triggers {
-        githubPush()
-    }
-
-
     stages {
         stage('Checkout latest code') {
             steps {
@@ -19,7 +14,9 @@ pipeline {
                 sh '''
                 sudo rsync -av --delete \
                 --exclude 'venv' \
-                --exclude 'diary.db' \
+                --exclude 'database.db' \
+                --exclude '.git' \
+                --exclude '__pycache__' \
                 --exclude 'static/uploads' \
                 ./ /home/ubuntu/diary-app2/
                 '''
@@ -29,7 +26,7 @@ pipeline {
         stage('Restart app') {
             steps {
                 sh '''
-                sudo /bin/systemctl restart diary-app
+                sudo /bin/systemctl restart diary-app.service
                 '''
             }
         }
@@ -38,12 +35,9 @@ pipeline {
             steps {
                 sh '''
                 sleep 3
-                curl -f http://localhost:5000
+                curl -f http://localhost:5000/login
                 '''
             }
         }
     }
 }
-
-
-
