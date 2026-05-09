@@ -31,20 +31,31 @@
                 Stop chasing closure. Choose yourself again. Let them.
             </p>
 
+            <div class="video-preview" id="video-preview-box">
+                <iframe
+                    id="resource-video"
+                    src=""
+                    title="Support video"
+                    frameborder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    allowfullscreen>
+                </iframe>
+            </div>
+
             <div class="resource-actions">
                 <a id="resource-link" href="#" target="_blank">
-                    Open resource
+                    Open on YouTube
                 </a>
 
-                <button type="button" onclick="nextResource()" class="button secondary">
-                    Show another
-                </button>
+                
             </div>
         </div>
 
         <div class="hero-actions">
             <button class="button" onclick="startTimer()">Start timer</button>
-            <a class="button secondary" href="{{ url_for('write_instead') }}">Write the message instead</a>
+            <a class="button secondary" href="{{ url_for('write_instead') }}">
+                Write the message instead
+            </a>
         </div>
     </div>
 </section>

@@ -116,4 +116,8 @@ function nextResource() {
 document.addEventListener("DOMContentLoaded", () => {
     updateDisplay();
     showResource(currentResource);
+
+    setInterval(() => {
+        nextResource();
+    }, 8000);
 });
