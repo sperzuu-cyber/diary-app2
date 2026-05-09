@@ -19,6 +19,7 @@
             <a href="{{ url_for('streak') }}">Streak</a>
             <a href="{{ url_for('journal') }}">Vault</a>
             <a href="{{ url_for('logout') }}">Logout</a>
+            <a href="{{ url_for('public_vault') }}">Public Vault</a>
         {% else %}
             <a href="{{ url_for('login') }}">Login</a>
             <a href="{{ url_for('register') }}" class="button-small">Start</a>

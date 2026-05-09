@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="journal-page">
+    <div class="page-header">
+        <p class="eyebrow">Public Vault</p>
+        <h1>Shared healing wall</h1>
+        <p class="subtitle">
+            Anonymous reflections from people choosing themselves instead of going back.
+        </p>
+    </div>
+
+    <div class="vault-grid">
+        {% if entries %}
+            {% for entry in entries %}
+                <article class="vault-card">
+                    <p class="date">{{ entry.created_at }}</p>
+                    <h3>{{ entry.entry_type.replace("_", " ").title() }}</h3>
+                    <span class="mood">{{ entry.mood }}</span>
+                    <p>{{ entry.content }}</p>
+                </article>
+            {% endfor %}
+        {% else %}
+            <p class="empty">No public entries yet.</p>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

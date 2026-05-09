@@ -389,3 +389,27 @@ textarea {
         text-align: center;
     }
 }
+
+.privacy-box {
+    margin-top: 12px;
+    padding: 16px;
+    border-radius: 16px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid var(--border);
+}
+
+.checkbox-label {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.checkbox-label input {
+    width: auto;
+}
+
+.privacy-box p {
+    margin: 8px 0 0;
+    color: var(--muted);
+    font-size: 0.9rem;
+}

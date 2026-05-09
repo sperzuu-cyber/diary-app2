@@ -26,6 +26,11 @@ def close_db(error):
         db.close()
 
 
+def column_exists(db, table_name, column_name):
+    columns = db.execute(f"PRAGMA table_info({table_name})").fetchall()
+    return any(column["name"] == column_name for column in columns)
+
+
 def init_db():
     db = get_db()
 
@@ -46,10 +51,14 @@ def init_db():
             entry_type TEXT NOT NULL,
             content TEXT NOT NULL,
             mood TEXT,
+            is_public INTEGER DEFAULT 0,
             created_at TEXT NOT NULL,
             FOREIGN KEY (user_id) REFERENCES users (id)
         )
     """)
+
+    if not column_exists(db, "entries", "is_public"):
+        db.execute("ALTER TABLE entries ADD COLUMN is_public INTEGER DEFAULT 0")
 
     db.execute("""
         CREATE TABLE IF NOT EXISTS urges (
@@ -189,6 +198,7 @@ def write_instead():
         message = request.form.get("message_they_wanted_to_send", "").strip()
         hoped_reply = request.form.get("hoped_reply", "").strip()
         ignored_feeling = request.form.get("ignored_feeling", "").strip()
+        is_public = 1 if request.form.get("is_public") == "on" else 0
 
         if custom_trigger:
             trigger = custom_trigger
@@ -212,10 +222,10 @@ def write_instead():
         db.execute(
             """
             INSERT INTO entries
-            (user_id, entry_type, content, mood, created_at)
-            VALUES (?, ?, ?, ?, ?)
+            (user_id, entry_type, content, mood, is_public, created_at)
+            VALUES (?, ?, ?, ?, ?, ?)
             """,
-            (session["user_id"], "unsent_message", message, trigger, now)
+            (session["user_id"], "unsent_message", message, trigger, is_public, now)
         )
 
         db.commit()
@@ -234,6 +244,7 @@ def checkin():
     if request.method == "POST":
         mood = request.form.get("mood", "")
         content = request.form.get("content", "").strip()
+        is_public = 1 if request.form.get("is_public") == "on" else 0
 
         if not content:
             flash("Write at least one honest sentence.", "warning")
@@ -242,14 +253,16 @@ def checkin():
         db = get_db()
         db.execute(
             """
-            INSERT INTO entries (user_id, entry_type, content, mood, created_at)
-            VALUES (?, ?, ?, ?, ?)
+            INSERT INTO entries
+            (user_id, entry_type, content, mood, is_public, created_at)
+            VALUES (?, ?, ?, ?, ?, ?)
             """,
             (
                 session["user_id"],
                 "daily_checkin",
                 content,
                 mood,
+                is_public,
                 datetime.now().strftime("%Y-%m-%d %H:%M:%S")
             )
         )
@@ -288,6 +301,23 @@ def journal():
     return render_template("journal.html", entries=entries, urges=urges, user=current_user())
 
 
+@app.route("/public-vault")
+def public_vault():
+    db = get_db()
+
+    entries = db.execute(
+        """
+        SELECT entries.*, users.username
+        FROM entries
+        JOIN users ON entries.user_id = users.id
+        WHERE entries.is_public = 1
+        ORDER BY entries.created_at DESC
+        """
+    ).fetchall()
+
+    return render_template("public_vault.html", entries=entries, user=current_user())
+
+
 @app.route("/streak")
 def streak():
     if not login_required():
@@ -318,14 +348,16 @@ def relapse():
 
     db.execute(
         """
-        INSERT INTO entries (user_id, entry_type, content, mood, created_at)
-        VALUES (?, ?, ?, ?, ?)
+        INSERT INTO entries
+        (user_id, entry_type, content, mood, is_public, created_at)
+        VALUES (?, ?, ?, ?, ?, ?)
         """,
         (
             session["user_id"],
             "relapse_reset",
             "Healing is not linear. I am starting again without shame.",
             "reset",
+            0,
             datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         )
     )
