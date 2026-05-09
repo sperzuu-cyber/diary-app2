@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="streak-page">
+    <div class="streak-main">
+        <p class="eyebrow">No-contact streak</p>
+        <h1>{{ streak }}</h1>
+        <h2>
+            {% if streak == 1 %}
+                day of choosing yourself.
+            {% else %}
+                days of choosing yourself.
+            {% endif %}
+        </h2>
+
+        <p class="subtitle">
+            Every day you do not beg for access to someone who walked away,
+            you rebuild your self-respect.
+        </p>
+
+        <div class="hero-actions">
+            <a class="button" href="{{ url_for('write_instead') }}">I want to text them</a>
+            <a class="button secondary" href="{{ url_for('timer') }}">Start urge timer</a>
+        </div>
+
+        <form method="POST" action="{{ url_for('relapse') }}" class="relapse-form">
+            <p>Did you contact them?</p>
+            <button type="submit" class="danger-button">Reset with compassion</button>
+        </form>
+    </div>
+</section>
+{% endblock %}

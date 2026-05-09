@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="journal-page">
+    <div class="page-header">
+        <p class="eyebrow">Memory Vault</p>
+        <h1>Your private archive</h1>
+        <p class="subtitle">This is where your unsent messages and check-ins live.</p>
+    </div>
+
+    <div class="vault-grid">
+        <div>
+            <h2>Unsent messages</h2>
+
+            {% if urges %}
+                {% for urge in urges %}
+                    <article class="vault-card">
+                        <p class="date">{{ urge.created_at }}</p>
+                        <h3>Trigger: {{ urge.trigger }}</h3>
+                        <p>{{ urge.message_they_wanted_to_send }}</p>
+
+                        {% if urge.hoped_reply %}
+                            <div class="reflection">
+                                <strong>You hoped they would say:</strong>
+                                <p>{{ urge.hoped_reply }}</p>
+                            </div>
+                        {% endif %}
+
+                        {% if urge.ignored_feeling %}
+                            <div class="reflection">
+                                <strong>If ignored, you said you would feel:</strong>
+                                <p>{{ urge.ignored_feeling }}</p>
+                            </div>
+                        {% endif %}
+                    </article>
+                {% endfor %}
+            {% else %}
+                <p class="empty">No unsent messages yet.</p>
+            {% endif %}
+        </div>
+
+        <div>
+            <h2>Check-ins</h2>
+
+            {% if entries %}
+                {% for entry in entries %}
+                    <article class="vault-card">
+                        <p class="date">{{ entry.created_at }}</p>
+                        <h3>{{ entry.entry_type.replace("_", " ").title() }}</h3>
+                        {% if entry.mood %}
+                            <span class="mood">{{ entry.mood }}</span>
+                        {% endif %}
+                        <p>{{ entry.content }}</p>
+                    </article>
+                {% endfor %}
+            {% else %}
+                <p class="empty">No check-ins yet.</p>
+            {% endif %}
+        </div>
+    </div>
+</section>
+{% endblock %}

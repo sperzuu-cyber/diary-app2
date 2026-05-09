@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="timer-page">
+    <div class="timer-card">
+        <p class="eyebrow">Urge Timer</p>
+        <h1>Wait 10 minutes first.</h1>
+
+        <div class="breathing-circle">
+            <span>Breathe</span>
+        </div>
+
+        <div id="timer">10:00</div>
+
+        <p class="subtitle">
+            You do not need to obey the first wave of emotion.
+            Let the urge pass before you decide.
+        </p>
+
+        <div class="prompt-box">
+            <h3>While you wait, answer this:</h3>
+            <p id="prompt">What pain are you trying to make them fix?</p>
+        </div>
+
+        <div class="hero-actions">
+            <button class="button" onclick="startTimer()">Start timer</button>
+            <a class="button secondary" href="{{ url_for('write_instead') }}">Write the message instead</a>
+        </div>
+    </div>
+</section>
+
+<script>
+let timeLeft = 600;
+let timerInterval = null;
+
+const prompts = [
+    "What pain are you trying to make them fix?",
+    "If they ignore you, will you feel better or worse?",
+    "Are you contacting them for love, or relief?",
+    "What would the healed version of you do right now?",
+    "What are you hoping they say back?",
+    "What would protecting your dignity look like tonight?"
+];
+
+function updateDisplay() {
+    const minutes = Math.floor(timeLeft / 60);
+    const seconds = timeLeft % 60;
+    document.getElementById("timer").innerText =
+        `${minutes}:${seconds.toString().padStart(2, "0")}`;
+}
+
+function startTimer() {
+    if (timerInterval) {
+        return;
+    }
+
+    timerInterval = setInterval(() => {
+        timeLeft--;
+        updateDisplay();
+
+        if (timeLeft % 90 === 0) {
+            const randomPrompt = prompts[Math.floor(Math.random() * prompts.length)];
+            document.getElementById("prompt").innerText = randomPrompt;
+        }
+
+        if (timeLeft <= 0) {
+            clearInterval(timerInterval);
+            timerInterval = null;
+            document.getElementById("prompt").innerText =
+                "You waited. That is emotional control. Now write it here instead of sending it.";
+        }
+    }, 1000);
+}
+
+updateDisplay();
+</script>
+{% endblock %}

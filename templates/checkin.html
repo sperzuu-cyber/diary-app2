@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="form-page">
+    <div class="form-card">
+        <p class="eyebrow">Daily emotional check-in</p>
+        <h1>What are you carrying today?</h1>
+        <p class="subtitle">You are not weak for feeling it. You are healing by naming it.</p>
+
+        <form method="POST">
+            <label>Current mood</label>
+            <select name="mood">
+                <option>calm</option>
+                <option>anxious</option>
+                <option>angry</option>
+                <option>lonely</option>
+                <option>hopeful</option>
+                <option>jealous</option>
+                <option>guilty</option>
+                <option>numb</option>
+                <option>proud</option>
+            </select>
+
+            <label>Answer one honestly:</label>
+            <textarea name="content" rows="8" placeholder="What did you survive today without contacting them? What did you almost do? What do you need to remember tonight?" required></textarea>
+
+            <button type="submit" class="button full">Save check-in</button>
+        </form>
+    </div>
+</section>
+{% endblock %}

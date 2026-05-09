@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="hero">
+    <div class="hero-card">
+        <p class="eyebrow">When the urge hits, do this first.</p>
+
+        <h1>Want to break no contact?<br><span>SEND IT HERE INSTEAD.</span></h1>
+
+        <p class="subtitle">
+            Write the message. Release the emotion. Keep your self-respect.
+            Nothing gets sent to them.
+        </p>
+
+        {% if user %}
+            <div class="streak-box">
+                <strong>{{ streak }}</strong>
+                <span>days of choosing yourself.</span>
+            </div>
+
+            <div class="hero-actions">
+                <a class="button" href="{{ url_for('write_instead') }}">Write it here instead</a>
+                <a class="button secondary" href="{{ url_for('timer') }}">Start 10-minute urge timer</a>
+            </div>
+        {% else %}
+            <div class="hero-actions">
+                <a class="button" href="{{ url_for('register') }}">Start your no-contact streak</a>
+                <a class="button secondary" href="{{ url_for('login') }}">Login</a>
+            </div>
+        {% endif %}
+    </div>
+</section>
+
+<section class="features-grid">
+    <div class="feature-card">
+        <h3>No-contact streak</h3>
+        <p>Track the number of days you chose yourself instead of chasing closure.</p>
+    </div>
+
+    <div class="feature-card">
+        <h3>Send it here instead</h3>
+        <p>Type everything you wanted to say without giving them access to your emotions.</p>
+    </div>
+
+    <div class="feature-card">
+        <h3>Urge timer</h3>
+        <p>Wait ten minutes before acting. Most urges weaken when you pause.</p>
+    </div>
+
+    <div class="feature-card">
+        <h3>Memory vault</h3>
+        <p>Look back later and see how far your mind has moved from the pain.</p>
+    </div>
+</section>
+{% endblock %}

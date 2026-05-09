@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Break Loop</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<nav class="navbar">
+    <a href="{{ url_for('home') }}" class="logo">Break Loop</a>
+
+    <div class="nav-links">
+        {% if user %}
+            <a href="{{ url_for('write_instead') }}">Write Instead</a>
+            <a href="{{ url_for('timer') }}">Urge Timer</a>
+            <a href="{{ url_for('checkin') }}">Check-in</a>
+            <a href="{{ url_for('streak') }}">Streak</a>
+            <a href="{{ url_for('journal') }}">Vault</a>
+            <a href="{{ url_for('logout') }}">Logout</a>
+        {% else %}
+            <a href="{{ url_for('login') }}">Login</a>
+            <a href="{{ url_for('register') }}" class="button-small">Start</a>
+        {% endif %}
+    </div>
+</nav>
+
+<main>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="flash-container">
+                {% for category, message in messages %}
+                    <div class="flash {{ category }}">{{ message }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    {% block content %}{% endblock %}
+</main>
+
+</body>
+</html>

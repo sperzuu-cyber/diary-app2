@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="form-page">
+    <div class="form-card">
+        <p class="eyebrow">Private. Timestamped. Not sent.</p>
+        <h1>Send it here instead.</h1>
+        <p class="subtitle">
+            This message is saved in your vault so you can reflect on it later.
+            It is not sent to your ex.
+        </p>
+
+        <form method="POST">
+            <label>What made you want to contact them?</label>
+            <select name="trigger">
+                <option>saw their profile</option>
+                <option>dreamed about them</option>
+                <option>loneliness</option>
+                <option>remembered a memory</option>
+                <option>they posted something</option>
+                <option>jealousy</option>
+                <option>guilt</option>
+                <option>anxiety</option>
+                <option>missing intimacy</option>
+                <option>boredom</option>
+                <option>I don’t know</option>
+            </select>
+
+            <input type="text" name="custom_trigger" placeholder="Or write your own trigger...">
+
+            <label>What do you want to tell them right now?</label>
+            <textarea name="message_they_wanted_to_send" rows="8" placeholder="Write the message here. Do not send it to them." required></textarea>
+
+            <label>What are you hoping they say back?</label>
+            <select name="hoped_reply">
+                <option>I miss you too.</option>
+                <option>I made a mistake.</option>
+                <option>Please come back.</option>
+                <option>Let’s fix this.</option>
+                <option>I still love you.</option>
+                <option>I don’t know.</option>
+            </select>
+
+            <input type="text" name="hoped_reply" placeholder="Or write the exact reply you wish they would say...">
+
+            <label>If they ignored this message, how would you feel tomorrow?</label>
+            <textarea name="ignored_feeling" rows="6" placeholder="Be brutally honest. Would it make you feel calmer, or worse?"></textarea>
+
+            <button type="submit" class="button full">Save it here instead</button>
+        </form>
+    </div>
+</section>
+{% endblock %}

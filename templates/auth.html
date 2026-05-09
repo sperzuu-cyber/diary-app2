@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="form-page">
+    <div class="form-card narrow">
+        {% if mode == "register" %}
+            <h1>Start your streak</h1>
+            <p class="subtitle">Create a private space for the messages you should not send.</p>
+        {% else %}
+            <h1>Welcome back</h1>
+            <p class="subtitle">Come here before you go back to them.</p>
+        {% endif %}
+
+        <form method="POST">
+            <label>Username</label>
+            <input type="text" name="username" placeholder="Choose a username" required>
+
+            <label>Password</label>
+            <input type="password" name="password" placeholder="Choose a password" required>
+
+            <button type="submit" class="button full">
+                {% if mode == "register" %}Create account{% else %}Login{% endif %}
+            </button>
+        </form>
+    </div>
+</section>
+{% endblock %}
