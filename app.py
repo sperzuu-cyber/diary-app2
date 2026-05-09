@@ -156,25 +156,26 @@ def register():
         password = request.form["password"]
 
         password_hash = generate_password_hash(password)
+        today = date.today().isoformat()
 
-        conn = sqlite3.connect("database.db")
-        cursor = conn.cursor()
+        db = get_db()
 
         try:
-            cursor.execute("""
-                INSERT INTO users (email, username, password_hash)
-                VALUES (?, ?, ?)
-            """, (email, username, password_hash))
+            db.execute(
+                """
+                INSERT INTO users (email, username, password_hash, no_contact_start_date)
+                VALUES (?, ?, ?, ?)
+                """,
+                (email, username, password_hash, today)
+            )
 
-            conn.commit()
-            conn.close()
+            db.commit()
 
-            flash("Account created successfully. Please log in.")
+            flash("Account created successfully. Please log in.", "success")
             return redirect("/login")
 
         except sqlite3.IntegrityError:
-            conn.close()
-            flash("Email or username already exists.")
+            flash("Email or username already exists.", "danger")
             return redirect("/register")
 
     return render_template("register.html")
