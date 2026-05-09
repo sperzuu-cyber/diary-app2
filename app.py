@@ -11,7 +11,6 @@ app.secret_key = "CHANGE_THIS_TO_A_LONG_RANDOM_SECRET_KEY"
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DATABASE = os.path.join(BASE_DIR, "database.db")
 
-
 # -----------------------------
 # DATABASE HELPERS
 # -----------------------------
@@ -73,6 +72,17 @@ def init_db():
             ignored_feeling TEXT,
             did_contact_ex INTEGER DEFAULT 0,
             created_at TEXT NOT NULL,
+            FOREIGN KEY (user_id) REFERENCES users (id)
+        )
+    """)
+    db.execute("""
+        CREATE TABLE IF NOT EXISTS comments (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            entry_id INTEGER NOT NULL,
+            user_id INTEGER NOT NULL,
+            content TEXT NOT NULL,
+            created_at TEXT NOT NULL,
+            FOREIGN KEY (entry_id) REFERENCES entries (id),
             FOREIGN KEY (user_id) REFERENCES users (id)
         )
     """)
@@ -318,8 +328,21 @@ def public_vault():
         """
     ).fetchall()
 
-    return render_template("public_vault.html", entries=entries, user=current_user())
+    comments = db.execute(
+        """
+        SELECT comments.*, users.username
+        FROM comments
+        JOIN users ON comments.user_id = users.id
+        ORDER BY comments.created_at ASC
+        """
+    ).fetchall()
 
+    return render_template(
+        "public_vault.html",
+        entries=entries,
+        comments=comments,
+        user=current_user()
+    )
 
 @app.route("/streak")
 def streak():
@@ -416,6 +439,49 @@ def toggle_privacy(entry_id):
         flash("Entry is now private.", "info")
 
     return redirect(url_for("journal"))
+
+@app.route("/comment/<int:entry_id>", methods=["POST"])
+def comment(entry_id):
+    if not login_required():
+        return redirect(url_for("login"))
+
+    content = request.form.get("content", "").strip()
+
+    if not content:
+        flash("Comment cannot be empty.", "warning")
+        return redirect(url_for("public_vault"))
+
+    db = get_db()
+
+    entry = db.execute(
+        """
+        SELECT * FROM entries
+        WHERE id = ? AND is_public = 1
+        """,
+        (entry_id,)
+    ).fetchone()
+
+    if not entry:
+        flash("Public post not found.", "danger")
+        return redirect(url_for("public_vault"))
+
+    db.execute(
+        """
+        INSERT INTO comments (entry_id, user_id, content, created_at)
+        VALUES (?, ?, ?, ?)
+        """,
+        (
+            entry_id,
+            session["user_id"],
+            content,
+            datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        )
+    )
+
+    db.commit()
+
+    flash("Comment posted.", "success")
+    return redirect(url_for("public_vault"))
 
 if __name__ == "__main__":
     app.run(debug=True)

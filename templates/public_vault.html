@@ -6,18 +6,54 @@
         <p class="eyebrow">Public Vault</p>
         <h1>Shared healing wall</h1>
         <p class="subtitle">
-            Anonymous reflections from people choosing themselves instead of going back.
+            Public reflections from people choosing themselves instead of going back.
         </p>
     </div>
 
-    <div class="vault-grid">
+    <div class="public-feed">
         {% if entries %}
             {% for entry in entries %}
                 <article class="vault-card">
                     <p class="date">{{ entry.created_at }}</p>
-                    <h3>{{ entry.entry_type.replace("_", " ").title() }}</h3>
-                    <span class="mood">{{ entry.mood }}</span>
+
+                    <h3>
+                        {{ entry.entry_type.replace("_", " ").title() }}
+                    </h3>
+
+                    <p class="posted-by">
+                        Posted by <strong>{{ entry.username }}</strong>
+                    </p>
+
+                    {% if entry.mood %}
+                        <span class="mood">{{ entry.mood }}</span>
+                    {% endif %}
+
                     <p>{{ entry.content }}</p>
+
+                    <div class="comments-section">
+                        <h4>Comments</h4>
+
+                        {% for comment in comments %}
+                            {% if comment.entry_id == entry.id %}
+                                <div class="comment-card">
+                                    <p>
+                                        <strong>{{ comment.username }}</strong>
+                                        <span>{{ comment.created_at }}</span>
+                                    </p>
+                                    <p>{{ comment.content }}</p>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+
+                        {% if user %}
+                            <form method="POST" action="{{ url_for('comment', entry_id=entry.id) }}">
+                                <textarea name="content" rows="3" placeholder="Leave support, advice, or encouragement..." required></textarea>
+                                <button type="submit" class="button full">Post comment</button>
+                            </form>
+                        {% else %}
+                            <p class="empty">Log in to comment.</p>
+                        {% endif %}
+                    </div>
                 </article>
             {% endfor %}
         {% else %}
