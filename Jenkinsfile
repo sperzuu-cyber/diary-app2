@@ -35,7 +35,6 @@ pipeline {
                 --exclude 'static/uploads' \
                 ./ /home/ubuntu/diary-app2/
 
-                
                 sudo /usr/bin/chown -R ubuntu:ubuntu /home/ubuntu/diary-app2
                 sudo /usr/bin/chmod 775 /home/ubuntu/diary-app2
 
@@ -46,10 +45,27 @@ pipeline {
             }
         }
 
-        stage('Restart app') {
+        stage('Build Docker image') {
             steps {
                 sh '''
-                sudo /usr/bin/systemctl restart diary-app.service
+                cd /home/ubuntu/diary-app2
+                docker build -t my-flask-app .
+                '''
+            }
+        }
+
+        stage('Restart Docker container') {
+            steps {
+                sh '''
+                docker stop my-flask-container || true
+                docker rm my-flask-container || true
+
+                docker run -d \
+                  --name my-flask-container \
+                  --restart unless-stopped \
+                  -p 5000:5000 \
+                  -v /home/ubuntu/break-loop-data:/home/ubuntu/break-loop-data \
+                  my-flask-app
                 '''
             }
         }
@@ -66,11 +82,11 @@ pipeline {
 
     post {
         success {
-            echo 'Deployment successful. Website is live.'
+            echo 'Deployment successful. Docker container is live.'
         }
 
         failure {
-            echo 'Deployment failed. Check Jenkins console output and diary-app.service logs.'
+            echo 'Deployment failed. Check Jenkins console output and Docker logs.'
         }
     }
 }
