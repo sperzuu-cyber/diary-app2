@@ -127,6 +127,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (videoBox) {
         videoBox.addEventListener("mouseenter", stopResourceRotation);
         videoBox.addEventListener("touchstart", stopResourceRotation);
+        videoBox.addEventListener("mouseleave", startResourceRotation);
     }
 });
 
