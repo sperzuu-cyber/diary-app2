@@ -112,6 +112,11 @@ function startResourceRotation() {
     }, 4000);
 }
 
+function stopResourceRotation() {
+    clearInterval(resourceRotation);
+    resourceRotation = null;
+}
+
 function startTimer() {
     if (timerInterval) return;
 
@@ -139,4 +144,12 @@ document.addEventListener("DOMContentLoaded", () => {
     updateDisplay();
     showResource(currentResource);
     startResourceRotation();
+
+    const videoBox = document.getElementById("video-preview-box");
+
+    if (videoBox) {
+        videoBox.addEventListener("click", () => {
+            stopResourceRotation();
+        });
+    }
 });
