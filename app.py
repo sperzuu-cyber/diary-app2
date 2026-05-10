@@ -59,6 +59,9 @@ def init_db():
     if not column_exists(db, "users", "reset_token_expiry"):
         db.execute("ALTER TABLE users ADD COLUMN reset_token_expiry TEXT")
 
+    if not column_exists(db, "users", "show_streak_publicly"):
+        db.execute("ALTER TABLE users ADD COLUMN show_streak_publicly INTEGER DEFAULT 1")
+
     db.execute("""
         CREATE TABLE IF NOT EXISTS entries (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -610,14 +613,15 @@ def user_profile(username):
 
     streak_days = None
 
-    if user["show_streak_publicly"] and user["no_contact_start_date"]:
+    if user["show_streak_publicly"] == 1 and user["no_contact_start_date"]:
         start = date.fromisoformat(user["no_contact_start_date"])
-        streak_days = (date.today() - start).days
+        streak_days = max((date.today() - start).days, 0)
 
     return render_template(
         "profile.html",
         profile_user=user,
-        streak_days=streak_days
+        streak_days=streak_days,
+        user=current_user()
     )
 
 if __name__ == "__main__":

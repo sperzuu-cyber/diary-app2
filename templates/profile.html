@@ -1,7 +1,17 @@
-{% if streak_days is not none %}
-    <div class="streak-badge">
-        🔥 {{ streak_days }} day no-contact streak
+{% extends "base.html" %}
+
+{% block content %}
+<section class="profile-page">
+    <div class="profile-card">
+        <h1>{{ profile_user.username }}</h1>
+
+        {% if streak_days is not none %}
+            <div class="streak-badge">
+                🔥 {{ streak_days }} day no-contact streak
+            </div>
+        {% else %}
+            <p>This user has chosen to keep their streak private.</p>
+        {% endif %}
     </div>
-{% else %}
-    <p>This user has chosen to keep their streak private.</p>
-{% endif %}
+</section>
+{% endblock %}

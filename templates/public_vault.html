@@ -21,7 +21,12 @@
                     </h3>
 
                     <p class="posted-by">
-                        Posted by <strong>{{ entry.username }}</strong>
+                        Posted by
+                        <strong>
+                            <a href="{{ url_for('user_profile', username=entry.username) }}">
+                                {{ entry.username }}
+                            </a>
+                        </strong>
                     </p>
 
                     {% if entry.mood %}
