@@ -24,6 +24,9 @@ pipeline {
         stage('Deploy code to app folder') {
             steps {
                 sh '''
+                sudo mkdir -p /home/ubuntu/diary-app2
+                sudo mkdir -p /home/ubuntu/break-loop-data
+
                 sudo /usr/bin/rsync -av --delete \
                 --exclude 'venv' \
                 --exclude 'database.db' \
@@ -40,7 +43,10 @@ pipeline {
 
                 sudo /usr/bin/chown -R ubuntu:ubuntu /home/ubuntu/break-loop-data
                 sudo /usr/bin/chmod 775 /home/ubuntu/break-loop-data
-                sudo /usr/bin/chmod 664 /home/ubuntu/break-loop-data/database.db
+
+                if [ -f /home/ubuntu/break-loop-data/database.db ]; then
+                  sudo /usr/bin/chmod 664 /home/ubuntu/break-loop-data/database.db
+                fi
                 '''
             }
         }
@@ -49,7 +55,7 @@ pipeline {
             steps {
                 sh '''
                 cd /home/ubuntu/diary-app2
-                docker build -t my-flask-app .
+                DOCKER_BUILDKIT=0 docker build -t my-flask-app .
                 '''
             }
         }
@@ -57,8 +63,7 @@ pipeline {
         stage('Restart Docker container') {
             steps {
                 sh '''
-                docker stop my-flask-container || true
-                docker rm my-flask-container || true
+                docker rm -f my-flask-container || true
 
                 docker run -d \
                   --name my-flask-container \
@@ -73,8 +78,9 @@ pipeline {
         stage('Check app') {
             steps {
                 sh '''
-                sleep 3
-                curl -f http://localhost:5000/login
+                sleep 5
+                docker ps
+                curl -f http://localhost:5000/login || (docker logs my-flask-container --tail 80 && exit 1)
                 '''
             }
         }

@@ -1,6 +1,7 @@
 let timeLeft = 600;
 let timerInterval = null;
 let currentResource = 0;
+let resourceRotation = null;
 
 const prompts = [
     "What pain are you trying to make them fix?",
@@ -71,10 +72,7 @@ const resources = [
 
 function updateDisplay() {
     const timer = document.getElementById("timer");
-
-    if (!timer) {
-        return;
-    }
+    if (!timer) return;
 
     const minutes = Math.floor(timeLeft / 60);
     const seconds = timeLeft % 60;
@@ -82,10 +80,40 @@ function updateDisplay() {
     timer.innerText = `${minutes}:${seconds.toString().padStart(2, "0")}`;
 }
 
-function startTimer() {
-    if (timerInterval) {
-        return;
+function showResource(index) {
+    const resource = resources[index];
+
+    document.getElementById("resource-title").innerText = resource.title;
+    document.getElementById("resource-message").innerText = resource.message;
+    document.getElementById("resource-link").href = resource.link;
+
+    const video = document.getElementById("resource-video");
+    const videoBox = document.getElementById("video-preview-box");
+
+    if (resource.video) {
+        video.src = `https://www.youtube.com/embed/${resource.video}`;
+        videoBox.style.display = "block";
+    } else {
+        video.src = "";
+        videoBox.style.display = "none";
     }
+}
+
+function nextResource() {
+    currentResource = (currentResource + 1) % resources.length;
+    showResource(currentResource);
+}
+
+function startResourceRotation() {
+    if (resourceRotation !== null) return;
+
+    resourceRotation = setInterval(() => {
+        nextResource();
+    }, 4000);
+}
+
+function startTimer() {
+    if (timerInterval) return;
 
     timerInterval = setInterval(() => {
         timeLeft--;
@@ -107,75 +135,8 @@ function startTimer() {
     }, 1000);
 }
 
-function showResource(index) {
-    const resource = resources[index];
-
-    document.getElementById("resource-title").innerText = resource.title;
-    document.getElementById("resource-message").innerText = resource.message;
-    document.getElementById("resource-link").href = resource.link;
-
-    const video = document.getElementById("resource-video");
-
-    if (resource.video) {
-        video.src = `https://www.youtube.com/embed/${resource.video}`;
-        video.style.display = "block";
-    } else {
-        video.src = "";
-        video.style.display = "none";
-    }
-}
-
-function nextResource() {
-    currentResource = (currentResource + 1) % resources.length;
-    showResource(currentResource);
-}
-
 document.addEventListener("DOMContentLoaded", () => {
     updateDisplay();
     showResource(currentResource);
-
-let currentSlide = 0;
-
-const slides = document.querySelectorAll(".slide");
-const videos = document.querySelectorAll("video");
-
-let rotation;
-
-function showSlide(index) {
-    slides.forEach((slide, i) => {
-        slide.style.display = i === index ? "block" : "none";
-    });
-}
-
-function nextSlide() {
-    currentSlide = (currentSlide + 1) % slides.length;
-    showSlide(currentSlide);
-}
-
-function startRotation() {
-    rotation = setInterval(nextSlide, 8000);
-}
-
-function stopRotation() {
-    clearInterval(rotation);
-}
-
-showSlide(currentSlide);
-startRotation();
-
-videos.forEach(video => {
-
-    video.addEventListener("play", () => {
-        stopRotation();
-    });
-
-    video.addEventListener("pause", () => {
-        startRotation();
-    });
-
-    video.addEventListener("ended", () => {
-        startRotation();
-    });
-
-});
+    startResourceRotation();
 });
