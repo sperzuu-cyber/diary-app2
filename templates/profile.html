@@ -1,0 +1,7 @@
+{% if streak_days is not none %}
+    <div class="streak-badge">
+        🔥 {{ streak_days }} day no-contact streak
+    </div>
+{% else %}
+    <p>This user has chosen to keep their streak private.</p>
+{% endif %}

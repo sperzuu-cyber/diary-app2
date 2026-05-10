@@ -596,5 +596,29 @@ def delete_comment(comment_id):
     flash("Comment deleted.", "info")
     return redirect(url_for("public_vault"))
 
+@app.route("/user/<username>")
+def user_profile(username):
+    db = get_db()
+
+    user = db.execute(
+        "SELECT * FROM users WHERE username = ?",
+        (username,)
+    ).fetchone()
+
+    if user is None:
+        return "User not found", 404
+
+    streak_days = None
+
+    if user["show_streak_publicly"] and user["no_contact_start_date"]:
+        start = date.fromisoformat(user["no_contact_start_date"])
+        streak_days = (date.today() - start).days
+
+    return render_template(
+        "profile.html",
+        profile_user=user,
+        streak_days=streak_days
+    )
+
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)
