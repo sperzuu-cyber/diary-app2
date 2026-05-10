@@ -55,7 +55,7 @@ pipeline {
             steps {
                 sh '''
                 cd /home/ubuntu/diary-app2
-                sudo DOCKER_BUILDKIT=0 docker build -t my-flask-app .
+                sudodocker build -t my-flask-app .
                 '''
             }
         }
