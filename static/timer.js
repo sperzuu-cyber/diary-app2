@@ -117,6 +117,19 @@ function stopResourceRotation() {
     resourceRotation = null;
 }
 
+document.addEventListener("DOMContentLoaded", () => {
+    updateDisplay();
+    showResource(currentResource);
+    startResourceRotation();
+
+    const videoBox = document.getElementById("video-preview-box");
+
+    if (videoBox) {
+        videoBox.addEventListener("mouseenter", stopResourceRotation);
+        videoBox.addEventListener("touchstart", stopResourceRotation);
+    }
+});
+
 function startTimer() {
     if (timerInterval) return;
 
