@@ -1,0 +1,12 @@
+__pycache__/
+*.pyc
+venv/
+.git/
+.vscode/
+
+database.db
+database.db-journal
+database.db-wal
+database.db-shm
+
+static/uploads/
