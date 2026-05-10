@@ -55,7 +55,7 @@ pipeline {
             steps {
                 sh '''
                 cd /home/ubuntu/diary-app2
-                DOCKER_BUILDKIT=0 docker build -t my-flask-app .
+                sudo DOCKER_BUILDKIT=0 docker build -t my-flask-app .
                 '''
             }
         }
@@ -63,9 +63,9 @@ pipeline {
         stage('Restart Docker container') {
             steps {
                 sh '''
-                docker rm -f my-flask-container || true
+                sudo docker rm -f my-flask-container || true
 
-                docker run -d \
+                sudo docker run -d \
                   --name my-flask-container \
                   --restart unless-stopped \
                   -p 5000:5000 \
@@ -79,8 +79,8 @@ pipeline {
             steps {
                 sh '''
                 sleep 5
-                docker ps
-                curl -f http://localhost:5000/login || (docker logs my-flask-container --tail 80 && exit 1)
+                sudo docker ps
+                curl -f http://localhost:5000/login || (sudo docker logs my-flask-container --tail 80 && exit 1)
                 '''
             }
         }
